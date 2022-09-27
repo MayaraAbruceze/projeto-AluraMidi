@@ -1,0 +1,167 @@
+JAVASCRIPT PARA WEB
+
+
+AULA: Conhecendo o JavaScript
+
+- Clicando no botão:
+
+	*Atributo controls - utilizado para mostrar o áudio na página, no caso do Alura Midi não utilizamos esse atributo, fazendo assim com que os áudios não apareçam na página.
+
+ASSIM,
+
+devemos passar o controle da reprodução do som que está na tag áudio para os botões.. É aí que entra o JS.
+
+	*Atributo onclick - adiciona alguma funcionalidade quando o botão é clicado.
+
+- Como colocar um botão do HTML dentro do JS?
+	1º precisamos ter o nome do seletor (como no CSS tem id, classe, etc)
+
+	* Função querySelector - faz uma busca pelo seletor, porém antes de usá-lo precisamos defení-lo. Ou seja, devo informar onde quero que seja buscado esse elemento com esse seletor.
+	document.querySelector('.tecla_pom');
+
+
+AULA: Funções
+
+Como reproduzir o som de uma tag áudio com o JS?
+- Função Play > Já existente no JS, como é função, preciso usar sintaxe de função.
+	document.querySelector('#som_tecla_pom').play();
+
+IMPORTANTE: É importante salientar que atualmente os navegadores tem uma espécie de controle, e que os sons são bloqueados antes do usuário ter qualquer iteração com a página.
+
+Função = algo que é chamada somente quando precisamos usar.
+
+
+AULA: Listas
+
+Para o código desse projeto não ficar gigantesco, precisamos aprender a pegar todas as tags de som, uma lista.
+	* Função querySelectorAll - busca todos os elementos com o seletor que for passado.
+	document.querySelectorAll('.tecla');
+
+
+AULA: Referências
+
+	Referência constante - elementos que irão armazenar somente aquele tipo de valor declarado.
+	- Criando uma referência constante:
+	const listaDeTeclas = document.querySelectorAll('.tecla');
+
+	Assim temos uma lista de teclas guardadas dentro de um nome que faz sentido e que tem significado.
+
+
+AULA: Conhecendo Listas
+
+	Como acessar individualmente as propriedades de um elemento dessa lista?
+	O evento de clicar, por exemplo, é aplicado em cada elemento da lista.
+
+	listaDeTeclas[i] - para acessar cada elemento da lista colocamos o nome da lista e o índice do elemento desejado dentro de cochetes. Lembrando que os índices sempre começam com 0.
+
+	listaDeTeclas[0].onclick = tocaSomPom - dessa maneira estamos acessando a propriedade onclick do elemento de índice 0 da lista.
+
+
+AULA: Percorrendo Uma Lista
+
+	Temos que levar em consideração que não é viável percorrer cada elemento de uma lista. Imagine só se tivéssemos um piano com mais de 80 teclas, o código ficaria enorme.
+	Por isso, pensaremos em uma maneira de percorrer essa lista de forma automatizada.
+	Condição WHILE (enquanto):
+	let i = 0;
+	while (i < listaDeTeclas.length) {
+		listaDeTeclas[i].onclick = tocaSomPom;
+		i++;
+	}
+	Nesse caso, porém, todas as teclas receberão o som Pom e não é esse o objetivo do projeto.
+
+
+AULA: Funções Com Parâmetros
+
+	* Primeiramente, vamos criar uma função com nome mais genérico.
+	* O seletor de teclas não pode ser fixo, pois vai precisar ser informado para saber o ID da tecla pressionada. Assim, vamos precisar de um parâmetro.
+	function tocaSom(idElementoAudio){
+		document. querySelector(idElementoAudio).play();
+	}
+
+
+AULA: Funções Anônimas
+
+	Precisamos passar uma parâmetro para a função sem executá-la imediatamente. Para isso, usaremos a função anônima, ou seja, sem nome.
+	As fuções anônimas só podem ser utilizadas quando elas são o valor de algum atributo ou estão sendo armazanadas dentro de alguma referência constante ou variável.
+	Uzaremos ela no lugar da função tocaSom.
+	listaDeTeclas[contador].onclick = function(){
+		tocaSom('#tecla_som_pom');
+	}
+	O próximo desafio a se pensar é "Como que eu crio um ID dinamicamente?"
+
+
+AULA: Textos Dinâmicos
+
+	Dentro da condição WHILE, não temos acesso a tag àudio, mas temos acesso ao elemento button. E através da classe desse elemento button podemos acessar qual é o instrumento que está sendo clicado.
+	Usaremos classList (lista de classes).
+	Crase, uma outra forma de criar strings dentro do JS. Tudo que é variável dentro da string precisa ser involvido pelo cifrão $.
+	Usaremos assim o chamado template string.
+	const idAudio = `#som_${instrumento}`;
+
+
+AULA: Repetição Otimizada Com For
+
+	Melhoria de código - Vamos pensar em uma forma melhor de percorrer os elementos de uma lista. Utilizamos o instrumento de repetição WHILE. O while dependeu de um fator externo pra funcionar, que no caso foi o contador.
+	Porém se tivéssemos outros instrumentos para oferecer, teríamos outras listas e com isso outros contadores e começaríamos a ter novamente repetições desnecessárias.
+	O JS oferece outras estruturas na linguagem que pode resolver isso de uma forma mais otimizada.
+	Assim, utilizaremos o FOR (para) no lugar do WHILE.
+	FOR = estrutura de repetição (laço), que irá fazer a mesma coisa que o while, porém a vantagem é que o contador pode ser declarado dentro dos parênteses do FOR.
+	for (let contador=0; contador < listaDeTeclas.length; contador++){
+	.....
+	}
+
+
+AULA: Eventos do Teclado
+
+	A navegação via teclado do projeto está inconscistente, então precisamos resolver isso.
+	Teremos que fazer a inserção da classe ativa nos botões acionados pelo teclado.
+	Precisamos adicionar essa classe ative na nossa lista (listaDeTeclas).
+
+	onkeydown - representa o momento em que uma tecla é acionada no teclado.
+	tecla.onkeydown = function() {
+		tecla.classList.add('ativa');
+	}
+
+	Pronto, conseguios adicionar a classe, porém, todas as teclas pressionadas ficam vermelhas mesmo quando não estão mais sendo pressionadas.
+	Nossa preocupação agora, é descobrir como retirar essa classe, após a tecla não estar mais ativa.
+
+
+AULA: Adicionando e Removendo Classes
+	remove - remove uma classe.
+	onkeyup - representa o momento em que a tecla não é mais pressionada.
+	tecla.onkeyup = function() {
+		tecla.classList.remove('ativa');
+	}
+
+	Precisamos limitar as teclas que serão pressionadas e inseridas a classe ativa.
+
+
+AULA: Condições no Código
+
+	Precisamos limitar apenas para a tecla "enter" ou "barra de espaço". Somente se essas duas teclas forem pressionadas é que a classe "ativa" será executada.
+	== sinal de igualdade, compara apenas valores.
+	=== sinal de igualdade também, porém esse é mais seguro para lógicas, pois compara não só o valor, mas também o tipo do dado.
+
+
+AULA: Operador Lógico
+
+	Precisamos replicar a mesma lógica usada na tecla "space" para a tecla "enter".
+	Usaremos o operador lógico "ou" (||)
+	if (evento.code === 'Space' || evento.code === 'Enter'){
+            tecla.classList.add('ativa');
+      }
+
+
+AULA: Mais Condições
+
+	if (elemento != null && elemento.localName === 'audio'){
+        elemento.play();
+	}
+
+	Nesse caso, posso retirar a parte [!= null] do código, pois o javascript já entende que se o elemento existe, ou seja, não seja nulo, ele fará alguma ação.
+	Assim, o código pode ser escrito da seguinte maneira:
+	if (elemento && elemento.localName === 'audio'){
+
+	
+
+
